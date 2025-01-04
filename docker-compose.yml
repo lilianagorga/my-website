@@ -4,4 +4,34 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
+      SPRING_PROFILES_ACTIVE: prod
+    volumes:
+      - ./.env.production:/app/.env.production
+    depends_on:
+      my-website-db:
+          condition: service_healthy
+    networks:
+      - my-website-network
+
+  my-website-db:
+    image: mysql:8.0
+    container_name: my-website-prod-db
+    restart: always
+    env_file:
+      - .env.production
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - my-website-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      retries: 5
+
+volumes:
+  db_data:
+
+networks:
+  my-website-network:
