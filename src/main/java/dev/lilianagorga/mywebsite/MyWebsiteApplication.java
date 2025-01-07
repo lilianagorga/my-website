@@ -18,10 +18,7 @@ public class MyWebsiteApplication {
       String envFileName = activeProfile.equals("dev") ? ".env" : ".env." + activeProfile;
       Dotenv dotenv = Dotenv.configure().filename(envFileName).load();
 
-      String dbUriKey = switch (activeProfile) {
-        case "test" -> "TEST_DB_URL";
-        default -> "DB_URL";
-      };
+      String dbUriKey = "test".equals(activeProfile) ? "TEST_DB_URL" : "DB_URL";
 
       String dbUri = dotenv.get(dbUriKey);
       if (dbUri == null) {
