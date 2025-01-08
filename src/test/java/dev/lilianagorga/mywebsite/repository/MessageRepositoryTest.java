@@ -1,6 +1,6 @@
-package dev.lilianagorga.mywebsite.repositories;
+package dev.lilianagorga.mywebsite.repository;
 
-import dev.lilianagorga.mywebsite.entities.Message;
+import dev.lilianagorga.mywebsite.entity.Message;
 import dev.lilianagorga.mywebsite.AbstractTestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
