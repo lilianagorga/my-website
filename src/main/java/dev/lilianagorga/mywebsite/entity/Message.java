@@ -1,5 +1,7 @@
-package dev.lilianagorga.mywebsite.entities;
+package dev.lilianagorga.mywebsite.entity;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,8 +18,14 @@ public class Message {
   @Id
   private String id;
 
+  @NotBlank(message = "Name is mandatory")
   private String name;
+
+  @Email(message = "Invalid email format")
+  @NotBlank(message = "Email is mandatory")
   private String email;
+
+  @NotBlank(message = "Message cannot be empty")
   private String message;
 
   @Builder.Default

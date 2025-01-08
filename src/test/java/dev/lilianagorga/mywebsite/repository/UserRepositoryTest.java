@@ -1,6 +1,6 @@
-package dev.lilianagorga.mywebsite.repositories;
+package dev.lilianagorga.mywebsite.repository;
 
-import dev.lilianagorga.mywebsite.entities.User;
+import dev.lilianagorga.mywebsite.entity.User;
 import dev.lilianagorga.mywebsite.AbstractTestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;

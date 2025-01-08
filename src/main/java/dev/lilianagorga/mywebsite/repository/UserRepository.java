@@ -1,6 +1,6 @@
-package dev.lilianagorga.mywebsite.repositories;
+package dev.lilianagorga.mywebsite.repository;
 
-import dev.lilianagorga.mywebsite.entities.User;
+import dev.lilianagorga.mywebsite.entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
