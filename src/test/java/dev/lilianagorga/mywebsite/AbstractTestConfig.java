@@ -14,5 +14,7 @@ public class AbstractTestConfig {
   static void configureDynamicProperties(DynamicPropertyRegistry registry) {
     Dotenv dotenv = Dotenv.configure().filename(".env.testing").load();
     registry.add("spring.data.mongodb.uri", () -> dotenv.get("TEST_DB_URL"));
+    registry.add("jwt.secret", () -> dotenv.get("JWT_SECRET"));
+    registry.add("jwt.expirationMs", () -> dotenv.get("JWT_EXPIRATION_MS"));
   }
 }

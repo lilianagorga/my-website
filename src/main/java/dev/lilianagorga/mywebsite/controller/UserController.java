@@ -4,8 +4,10 @@ import dev.lilianagorga.mywebsite.entity.User;
 import dev.lilianagorga.mywebsite.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,14 +16,24 @@ import java.util.Optional;
 public class UserController {
 
   private final UserService userService;
+  private final PasswordEncoder passwordEncoder;
 
-  public UserController(UserService userService) {
+  public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+
     this.userService = userService;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public User createUser(@Valid @RequestBody User user) {
+    if (user.getRoles() == null || user.getRoles().isEmpty()) {
+      user.setRoles(Collections.singletonList("USER"));
+    }
+    if (user.getUsername() == null || user.getUsername().isBlank()) {
+      user.setUsername("default_username");
+    }
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
     return userService.createUser(user);
   }
 

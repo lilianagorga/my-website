@@ -7,6 +7,7 @@ import dev.lilianagorga.mywebsite.repository.ProjectRepository;
 import dev.lilianagorga.mywebsite.repository.UserRepository;
 import dev.lilianagorga.mywebsite.repository.MessageRepository;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
@@ -20,11 +21,13 @@ public class DatabaseSeeder {
   private final UserRepository userRepository;
   private final ProjectRepository projectRepository;
   private final MessageRepository messageRepository;
+  private final PasswordEncoder passwordEncoder;
 
-  public DatabaseSeeder(UserRepository userRepository, ProjectRepository projectRepository, MessageRepository messageRepository) {
+  public DatabaseSeeder(UserRepository userRepository, ProjectRepository projectRepository, MessageRepository messageRepository, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
     this.projectRepository = projectRepository;
     this.messageRepository = messageRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @PostConstruct
@@ -32,34 +35,34 @@ public class DatabaseSeeder {
     userRepository.deleteAll();
     projectRepository.deleteAll();
     messageRepository.deleteAll();
-
     seedUsers();
     seedProjects();
     seedMessages();
-
     System.out.println("Development database populated successfully!");
+    System.out.println("Users in database after seeding:");
+    userRepository.findAll().forEach(user -> System.out.printf("User: %s, Roles: %s%n", user.getEmail(), user.getRoles()));
   }
 
   private void seedUsers() {
-    Optional<User> admin = userRepository.findByEmail("admin@example.com");
+    Optional<User> admin = userRepository.findByEmail("admin@email.com");
     if (admin.isEmpty()) {
       userRepository.save(
               User.builder()
                       .username("admin")
-                      .email("admin@example.com")
-                      .password("securePassword123")
+                      .email("admin@email.com")
+                      .password(passwordEncoder.encode("securePassword123"))
                       .roles(List.of("ADMIN"))
                       .build()
       );
     }
 
-    Optional<User> regularUser = userRepository.findByEmail("johndoe@example.com");
+    Optional<User> regularUser = userRepository.findByEmail("liliana@email.com");
     if (regularUser.isEmpty()) {
       userRepository.save(
               User.builder()
-                      .username("john_doe")
-                      .email("johndoe@example.com")
-                      .password("password123")
+                      .username("liliana")
+                      .email("liliana@email.com")
+                      .password(passwordEncoder.encode("securePassword123"))
                       .roles(List.of("USER"))
                       .build()
       );
