@@ -2,6 +2,7 @@ package dev.lilianagorga.mywebsite.controller;
 
 import dev.lilianagorga.mywebsite.exception.ErrorMessage;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,6 +28,17 @@ public class GlobalExceptionHandler {
             .timestamp(new Date())
             .message("Validation failed")
             .details(errors)
+            .build();
+  }
+
+  @ExceptionHandler(BadCredentialsException.class)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  public ErrorMessage handleBadCredentialsException(BadCredentialsException ex) {
+    return ErrorMessage.builder()
+            .statusCode(HttpStatus.UNAUTHORIZED.value())
+            .timestamp(new Date())
+            .message("Invalid credentials")
+            .details(Map.of("error", ex.getMessage()))
             .build();
   }
 }
