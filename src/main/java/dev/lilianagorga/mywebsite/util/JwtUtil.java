@@ -52,11 +52,16 @@ public class JwtUtil {
 
   private Claims parseToken(String token) {
     try {
-      return Jwts.parserBuilder()
+      Claims claims = Jwts.parserBuilder()
               .setSigningKey(secretKey)
               .build()
               .parseClaimsJws(token)
               .getBody();
+      if (claims.getExpiration().before(new Date())) {
+        throw new IllegalArgumentException("Token has expired.");
+      }
+
+      return claims;
     } catch (Exception e) {
       System.err.println("Error during token parsing: " + e.getMessage());
       throw new IllegalArgumentException("Error during parsing token", e);
