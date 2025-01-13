@@ -1,5 +1,6 @@
 package dev.lilianagorga.mywebsite.controller;
 
+import dev.lilianagorga.mywebsite.exception.EmailSendingException;
 import dev.lilianagorga.mywebsite.exception.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -38,6 +39,17 @@ public class GlobalExceptionHandler {
             .statusCode(HttpStatus.UNAUTHORIZED.value())
             .timestamp(new Date())
             .message("Invalid credentials")
+            .details(Map.of("error", ex.getMessage()))
+            .build();
+  }
+
+  @ExceptionHandler(EmailSendingException.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public ErrorMessage handleEmailSendingException(EmailSendingException ex) {
+    return ErrorMessage.builder()
+            .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+            .timestamp(new Date())
+            .message("Error occurred while sending email")
             .details(Map.of("error", ex.getMessage()))
             .build();
   }

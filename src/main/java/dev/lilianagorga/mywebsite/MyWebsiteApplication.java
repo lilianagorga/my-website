@@ -34,6 +34,12 @@ public class MyWebsiteApplication {
       System.setProperty("jwt.secret", jwtSecret);
       String jwtExpirationMs = dotenv.get("JWT_EXPIRATION_MS");
       System.setProperty("jwt.expirationMs", Objects.requireNonNullElse(jwtExpirationMs, "86400000"));
+
+      String sendGridApiKey = dotenv.get("SENDGRID_API_KEY");
+      if (sendGridApiKey == null) {
+        throw new IllegalStateException("Variable SENDGRID_API_KEY not found in file " + envFileName);
+      }
+      System.setProperty("sendgrid.api.Key", sendGridApiKey);
     }
 
     SpringApplication.run(MyWebsiteApplication.class, args);

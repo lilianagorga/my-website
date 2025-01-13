@@ -16,5 +16,6 @@ public class AbstractTestConfig {
     registry.add("spring.data.mongodb.uri", () -> dotenv.get("TEST_DB_URL"));
     registry.add("jwt.secret", () -> dotenv.get("JWT_SECRET"));
     registry.add("jwt.expirationMs", () -> dotenv.get("JWT_EXPIRATION_MS"));
+    registry.add("sendgrid.api.key", () -> dotenv.get("SENDGRID_API_KEY"));
   }
 }

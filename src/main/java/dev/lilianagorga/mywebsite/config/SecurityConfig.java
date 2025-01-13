@@ -36,12 +36,12 @@ public class SecurityConfig {
       http.csrf(AbstractHttpConfigurer::disable)
               .authorizeHttpRequests(auth -> auth
                       .requestMatchers("/auth/**").permitAll()
+                      .requestMatchers("/send-email").permitAll()
                       .requestMatchers("/users/**").hasAnyAuthority("USER", "ADMIN")
                       .anyRequest().authenticated())
               .httpBasic(Customizer.withDefaults());
       http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
-
     return http.build();
   }
 
