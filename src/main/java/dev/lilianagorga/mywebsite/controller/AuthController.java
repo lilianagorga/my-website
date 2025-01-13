@@ -41,6 +41,8 @@ public class AuthController {
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     if (user.getRoles() == null || user.getRoles().isEmpty()) {
       user.setRoles(Collections.singletonList("USER"));
+    } else if (!List.of("USER", "ADMIN").containsAll(user.getRoles())) {
+      throw new IllegalArgumentException("Invalid role provided.");
     }
     if (user.getUsername() == null || user.getUsername().isBlank()) {
       user.setUsername("default_username");
