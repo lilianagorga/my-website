@@ -17,5 +17,6 @@ public class AbstractTestConfig {
     registry.add("jwt.secret", () -> dotenv.get("JWT_SECRET"));
     registry.add("jwt.expirationMs", () -> dotenv.get("JWT_EXPIRATION_MS"));
     registry.add("sendgrid.api.key", () -> dotenv.get("SENDGRID_API_KEY"));
+    registry.add("site.owner.email", () -> dotenv.get("SITE_OWNER_EMAIL"));
   }
 }

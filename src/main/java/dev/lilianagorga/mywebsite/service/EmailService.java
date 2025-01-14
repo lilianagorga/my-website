@@ -17,11 +17,14 @@ public class EmailService {
 
   private final SendGrid sendGrid;
   private final String activeProfile;
+  private final String senderEmail;
 
   public EmailService(@Value("${sendgrid.api.key}") String apiKey,
-                      @Value("${spring.profiles.active}") String activeProfile) {
+                      @Value("${spring.profiles.active}") String activeProfile,
+                      @Value("${site.owner.email}") String senderEmail) {
     this.sendGrid = new SendGrid(apiKey);
     this.activeProfile = activeProfile;
+    this.senderEmail = senderEmail;
   }
 
   public String sendEmail(String to, String subject, String body) {
@@ -30,7 +33,7 @@ public class EmailService {
       return "Email not sent (Mocked). Active profile: " + activeProfile;
     }
 
-    Email fromEmail = new Email("gorgaliliana87@gmail.com");
+    Email fromEmail = new Email(senderEmail);
     Email toEmail = new Email(to);
     Content content = new Content("text/plain", body);
     Mail mail = new Mail(fromEmail, subject, toEmail, content);
