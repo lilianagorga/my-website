@@ -40,6 +40,12 @@ public class MyWebsiteApplication {
         throw new IllegalStateException("Variable SENDGRID_API_KEY not found in file " + envFileName);
       }
       System.setProperty("sendgrid.api.Key", sendGridApiKey);
+
+      String siteOwnerEmail = dotenv.get("SITE_OWNER_EMAIL");
+      if (siteOwnerEmail == null) {
+        throw new IllegalStateException("Variable SITE_OWNER_EMAIL not found in file " + envFileName);
+      }
+      System.setProperty("site.owner.email", siteOwnerEmail);
     }
 
     SpringApplication.run(MyWebsiteApplication.class, args);
