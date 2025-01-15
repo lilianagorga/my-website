@@ -22,6 +22,7 @@ public class MessageController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public Message createMessage(@Valid @RequestBody Message message) {
+
     return messageService.createMessage(message);
   }
 

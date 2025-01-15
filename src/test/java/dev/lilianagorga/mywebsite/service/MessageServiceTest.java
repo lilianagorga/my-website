@@ -1,6 +1,7 @@
 package dev.lilianagorga.mywebsite.service;
 
 import dev.lilianagorga.mywebsite.AbstractTestConfig;
+import dev.lilianagorga.mywebsite.config.MessageTestConfig;
 import dev.lilianagorga.mywebsite.entity.Message;
 import dev.lilianagorga.mywebsite.repository.MessageRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -8,15 +9,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-
 import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Import(MessageTestConfig.class)
 class MessageServiceTest extends AbstractTestConfig {
 
   @Autowired
@@ -24,6 +26,9 @@ class MessageServiceTest extends AbstractTestConfig {
 
   @Autowired
   private MessageRepository messageRepository;
+
+  @Autowired
+  private NotificationService notificationService;
 
   private Message testMessage;
 
@@ -44,16 +49,16 @@ class MessageServiceTest extends AbstractTestConfig {
   }
 
   @Test
-  void createMessage() {
+  void createMessageShouldInvokeNotification() {
     Message newMessage = Message.builder()
             .name("New User")
             .email("new@example.com")
             .message("New Message")
             .build();
     Message createdMessage = messageService.createMessage(newMessage);
-
     assertNotNull(createdMessage.getId());
     assertEquals("New User", createdMessage.getName());
+    verify(notificationService).notify(createdMessage);
   }
 
   @Test
