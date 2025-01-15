@@ -11,13 +11,18 @@ import java.util.Optional;
 public class MessageService {
 
   private final MessageRepository messageRepository;
+  private final NotificationService notificationService;
 
-  public MessageService(MessageRepository messageRepository) {
+  public MessageService(MessageRepository messageRepository, NotificationService notificationService) {
     this.messageRepository = messageRepository;
+    this.notificationService = notificationService;
   }
 
+
   public Message createMessage(Message message) {
-    return messageRepository.save(message);
+    Message savedMessage = messageRepository.save(message);
+    notificationService.notify(savedMessage);
+    return savedMessage;
   }
 
   public Optional<Message> getMessageById(String id) {
