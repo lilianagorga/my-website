@@ -17,17 +17,24 @@ class EmailServiceTest {
   @Configuration
   static class TestConfig {
     @Bean
-    public EmailService emailService() {
-      return Mockito.mock(EmailService.class);
+    public EmailSender emailSender() {
+      return Mockito.mock(EmailSender.class);
+    }
+    @Bean
+    public EmailService emailService(EmailSender emailSender) {
+      return new EmailService(emailSender);
     }
   }
 
   @Autowired
   private EmailService emailService;
 
+  @Autowired
+  private EmailSender emailSender;
+
   @Test
   void shouldReturnMockedMessageInTestProfile() {
-    Mockito.when(emailService.sendEmail("test@example.com", "Subject", "Body"))
+    Mockito.when(emailSender.sendEmail("test@example.com", "Subject", "Body"))
             .thenReturn("Email not sent (Mocked). Active profile: test");
     String response = emailService.sendEmail("test@example.com", "Subject", "Body");
     assertEquals("Email not sent (Mocked). Active profile: test", response);

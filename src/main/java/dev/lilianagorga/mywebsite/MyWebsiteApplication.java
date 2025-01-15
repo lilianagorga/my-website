@@ -1,5 +1,6 @@
 package dev.lilianagorga.mywebsite;
 
+
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -35,13 +36,13 @@ public class MyWebsiteApplication {
       String jwtExpirationMs = dotenv.get("JWT_EXPIRATION_MS");
       System.setProperty("jwt.expirationMs", Objects.requireNonNullElse(jwtExpirationMs, "86400000"));
 
-      String sendGridApiKey = dotenv.get("SENDGRID_API_KEY");
+      String sendGridApiKey = dotenv.get("MOCK_KEY");
       if (sendGridApiKey == null) {
         throw new IllegalStateException("Variable SENDGRID_API_KEY not found in file " + envFileName);
       }
       System.setProperty("sendgrid.api.Key", sendGridApiKey);
 
-      String siteOwnerEmail = dotenv.get("SITE_OWNER_EMAIL");
+      String siteOwnerEmail = dotenv.get("MOCK_EMAIL");
       if (siteOwnerEmail == null) {
         throw new IllegalStateException("Variable SITE_OWNER_EMAIL not found in file " + envFileName);
       }
