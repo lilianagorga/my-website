@@ -37,6 +37,8 @@ public class SecurityConfig {
               .authorizeHttpRequests(auth -> auth
                       .requestMatchers("/auth/**").permitAll()
                       .requestMatchers("/send-email").permitAll()
+                      .requestMatchers("/").permitAll()
+                      .requestMatchers("/messages/**").permitAll()
                       .requestMatchers("/users/**").hasAnyAuthority("USER", "ADMIN")
                       .anyRequest().authenticated())
               .httpBasic(Customizer.withDefaults());

@@ -50,6 +50,12 @@ public class MyWebsiteApplication {
         throw new IllegalStateException("Variable SITE_OWNER_EMAIL not found in file " + envFileName);
       }
       System.setProperty("site.owner.email", siteOwnerEmail);
+
+      String adminMockEmail = dotenv.get("ADMIN_MOCK_EMAIL");
+      if (adminMockEmail == null) {
+        throw new IllegalStateException("Variable ADMIN_MOCK_EMAIL not found in file " + envFileName);
+      }
+      System.setProperty("admin.email", adminMockEmail);
     }
 
     SpringApplication.run(MyWebsiteApplication.class, args);
