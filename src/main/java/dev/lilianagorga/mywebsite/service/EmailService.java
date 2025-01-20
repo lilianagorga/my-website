@@ -11,7 +11,7 @@ public class EmailService {
     this.emailSender = emailSender;
   }
 
-  public String sendEmail(String to, String subject, String body) {
-    return emailSender.sendEmail(to, subject, body);
+  public String sendEmail(String to, String subject, String plainTextBody, String htmlBody) {
+    return emailSender.sendEmail(to, subject, plainTextBody, htmlBody);
   }
 }

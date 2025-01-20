@@ -34,9 +34,19 @@ class EmailServiceTest {
 
   @Test
   void shouldReturnMockedMessageInTestProfile() {
-    Mockito.when(emailSender.sendEmail("test@example.com", "Subject", "Body"))
-            .thenReturn("Email not sent (Mocked). Active profile: test");
-    String response = emailService.sendEmail("test@example.com", "Subject", "Body");
+    Mockito.when(emailSender.sendEmail(
+            "test@example.com",
+            "Subject",
+            "Body",
+            "<p>Body</p>"
+    )).thenReturn("Email not sent (Mocked). Active profile: test");
+
+    String response = emailService.sendEmail(
+            "test@example.com",
+            "Subject",
+            "Body",
+            "<p>Body</p>"
+    );
     assertEquals("Email not sent (Mocked). Active profile: test", response);
   }
 }

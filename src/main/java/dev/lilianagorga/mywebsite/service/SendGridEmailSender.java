@@ -4,6 +4,7 @@ import com.sendgrid.*;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
+import com.sendgrid.helpers.mail.objects.Personalization;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -23,11 +24,21 @@ public class SendGridEmailSender implements EmailSender {
   }
 
   @Override
-  public String sendEmail(String to, String subject, String body) {
+  public String sendEmail(String to, String subject, String plainTextBody, String htmlBody) {
     Email fromEmail = new Email(senderEmail);
     Email toEmail = new Email(to);
-    Content content = new Content("text/plain", body);
-    Mail mail = new Mail(fromEmail, subject, toEmail, content);
+    Content plainTextContent = new Content("text/plain", plainTextBody);
+    Content htmlContent = new Content("text/html", htmlBody);
+
+    Mail mail = new Mail();
+    mail.setFrom(fromEmail);
+    mail.setSubject(subject);
+    mail.addPersonalization(new Personalization() {{
+      addTo(toEmail);
+    }});
+    mail.addContent(plainTextContent);
+    mail.addContent(htmlContent);
+
 
     Request request = new Request();
     try {

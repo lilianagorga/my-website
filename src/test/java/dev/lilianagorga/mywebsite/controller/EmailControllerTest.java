@@ -43,16 +43,22 @@ class EmailControllerTest {
   @Test
   void shouldMockEmailServiceAndReturnResponse() throws Exception {
     MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new EmailController(emailService)).build();
-    Mockito.when(emailSender.sendEmail("test@example.com", "Test Subject", "Test Body"))
-            .thenReturn("Email not sent (Mocked). Active profile: test");
+    Mockito.when(emailSender.sendEmail(
+            "test@example.com",
+            "Test Subject",
+            "Test Body",
+            "<p>Test Body</p>"
+    )).thenReturn("Email not sent (Mocked). Active profile: test");
 
     String emailJson = """
                 {
                     "to": "test@example.com",
                     "subject": "Test Subject",
-                    "body": "Test Body"
+                    "plainTextBody": "Test Body",
+                    "htmlBody": "<p>Test Body</p>"
                 }
             """;
+
 
     mockMvc.perform(post("/send-email")
                     .contentType(MediaType.APPLICATION_JSON)

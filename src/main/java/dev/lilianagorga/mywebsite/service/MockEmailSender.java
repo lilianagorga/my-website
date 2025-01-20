@@ -12,8 +12,9 @@ public class MockEmailSender implements EmailSender {
   private static final Logger logger = LoggerFactory.getLogger(MockEmailSender.class);
 
   @Override
-  public String sendEmail(String to, String subject, String body) {
-    logger.info("MockEmailSender: Email not sent (mocked) to {} with subject {}", to, subject);
+  public String sendEmail(String to, String subject, String plainTextBody, String htmlBody) {
+    logger.info("MockEmailSender: Email not sent (mocked) to {} with subject {}. Plain text body: {}, HTML body: {}",
+            to, subject, plainTextBody, htmlBody);
     return "Email not sent (mocked).";
   }
 }

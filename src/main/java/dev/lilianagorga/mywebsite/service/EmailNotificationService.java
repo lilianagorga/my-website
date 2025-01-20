@@ -27,14 +27,23 @@ public class EmailNotificationService implements NotificationService {
       return;
     }
     String subject = "New Message from " + message.getName();
-    String body = String.format(
+    String plainTextBody = String.format(
             "You have received a new message:\n\nName: %s\nEmail: %s\nMessage: %s",
             message.getName(),
             message.getEmail(),
             message.getMessage()
     );
+    String htmlBody = String.format(
+            "<p>You have received a new message:</p>" +
+                    "<p><strong>Name:</strong> %s</p>" +
+                    "<p><strong>Email:</strong> %s</p>" +
+                    "<p><strong>Message:</strong><br>%s</p>",
+            message.getName(),
+            message.getEmail(),
+            message.getMessage().replace("\n", "<br>")
+    );
     try {
-      emailService.sendEmail(adminEmail, subject, body);
+      emailService.sendEmail(adminEmail, subject, plainTextBody, htmlBody);
       logger.info("Email notification sent for message ID: {}", message.getId());
     } catch (Exception e) {
       logger.error("Failed to send email notification for message ID: {}", message.getId(), e);
