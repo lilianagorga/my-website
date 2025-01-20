@@ -34,10 +34,19 @@ public class EmailNotificationService implements NotificationService {
             message.getMessage()
     );
     String htmlBody = String.format(
-            "<p>You have received a new message:</p>" +
+            "<html>" +
+                    "<body>" +
+                    "<h1>New Message Notification</h1>" +
+                    "<p>You have received a new message:</p>" +
                     "<p><strong>Name:</strong> %s</p>" +
                     "<p><strong>Email:</strong> %s</p>" +
-                    "<p><strong>Message:</strong><br>%s</p>",
+                    "<p><strong>Message:</strong><br>%s</p>" +
+                    "<hr>" +
+                    "<p>Thank you for contacting me. I will get back to you shortly.</p>" +
+                    "<p>Best regards <br>Liliana Gorga</p>" +
+                    "<img src=\"https://via.placeholder.com/150\" alt=\"Logo Placeholder\">" +
+                    "</body>" +
+                    "</html>",
             message.getName(),
             message.getEmail(),
             message.getMessage().replace("\n", "<br>")
