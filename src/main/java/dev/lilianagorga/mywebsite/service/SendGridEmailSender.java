@@ -38,6 +38,7 @@ public class SendGridEmailSender implements EmailSender {
     }});
     mail.addContent(plainTextContent);
     mail.addContent(htmlContent);
+    mail.addHeader("List-Unsubscribe", "<mailto:unsubscribe@lilianagorga.org>, <https://www.lilianagorga.org/unsubscribe>");
 
 
     Request request = new Request();

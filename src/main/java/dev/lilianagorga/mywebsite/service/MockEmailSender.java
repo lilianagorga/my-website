@@ -13,8 +13,9 @@ public class MockEmailSender implements EmailSender {
 
   @Override
   public String sendEmail(String to, String subject, String plainTextBody, String htmlBody) {
-    logger.info("MockEmailSender: Email not sent (mocked) to {} with subject {}. Plain text body: {}, HTML body: {}",
-            to, subject, plainTextBody, htmlBody);
+    String listUnsubscribeHeader = "<mailto:unsubscribe@lilianagorga.org>, <https://www.lilianagorga.org/unsubscribe>";
+    logger.info("MockEmailSender: Email not sent (mocked) to {} with subject {}. Plain text body: {}, HTML body: {}, List-Unsubscribe Header: {}",
+            to, subject, plainTextBody, htmlBody, listUnsubscribeHeader);
     return "Email not sent (mocked).";
   }
 }

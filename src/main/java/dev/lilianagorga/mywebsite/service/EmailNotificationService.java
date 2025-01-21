@@ -43,15 +43,18 @@ public class EmailNotificationService implements NotificationService {
                     "<p><strong>Message:</strong><br>%s</p>" +
                     "<hr>" +
                     "<p>" +
-                    "Thank you for contacting us. We value your input and will get back to you shortly. In the meantime, feel free to explore our " +
-                    "<a href=\"https://www.lilianagorga.org\">website</a> for more information." +
+                    "Thank you for reaching out to us. We'll review your message and respond soon." +
+                    "</p>" +
+                    "<p>" +
+                    "If you prefer not to receive further emails, you can " +
+                    "<a href=\"https://www.lilianagorga.org/unsubscribe\">unsubscribe here</a>." +
                     "</p>" +
                     "<p>" +
                     "Best regards,<br>" +
                     "Team Liliana Gorga" +
                     "</p>" +
                     "<p style=\"font-size: 12px; color: gray;\">" +
-                    "This is an automated message. Please do not reply to this email. If you have any questions, contact us at " +
+                    "This message was generated automatically. For any questions, contact us at " +
                     "<a href=\"mailto:info@lilianagorga.org\">info@lilianagorga.org</a>." +
                     "</p>" +
                     "</body>" +
