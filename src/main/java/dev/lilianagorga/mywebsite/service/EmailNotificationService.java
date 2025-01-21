@@ -42,9 +42,18 @@ public class EmailNotificationService implements NotificationService {
                     "<p><strong>Email:</strong> %s</p>" +
                     "<p><strong>Message:</strong><br>%s</p>" +
                     "<hr>" +
-                    "<p>Thank you for contacting me. I will get back to you shortly.</p>" +
-                    "<p>Best regards <br>Liliana Gorga</p>" +
-                    "<img src=\"https://via.placeholder.com/150\" alt=\"Logo Placeholder\">" +
+                    "<p>" +
+                    "Thank you for contacting us. We value your input and will get back to you shortly. In the meantime, feel free to explore our " +
+                    "<a href=\"https://www.lilianagorga.org\">website</a> for more information." +
+                    "</p>" +
+                    "<p>" +
+                    "Best regards,<br>" +
+                    "Team Liliana Gorga" +
+                    "</p>" +
+                    "<p style=\"font-size: 12px; color: gray;\">" +
+                    "This is an automated message. Please do not reply to this email. If you have any questions, contact us at " +
+                    "<a href=\"mailto:info@lilianagorga.org\">info@lilianagorga.org</a>." +
+                    "</p>" +
                     "</body>" +
                     "</html>",
             message.getName(),
