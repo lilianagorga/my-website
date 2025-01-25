@@ -1,10 +1,6 @@
 package dev.lilianagorga.mywebsite;
 
-
-import dev.lilianagorga.mywebsite.service.NotificationService;
 import io.github.cdimascio.dotenv.Dotenv;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -56,6 +52,24 @@ public class MyWebsiteApplication {
         throw new IllegalStateException("Variable ADMIN_MOCK_EMAIL not found in file " + envFileName);
       }
       System.setProperty("admin.email", adminMockEmail);
+
+      String mongoApiPublicKey = dotenv.get("MONGO_API_PUBLIC_KEY");
+      if (mongoApiPublicKey == null) {
+        throw new IllegalStateException("Variable MONGO_API_PUBLIC_KEY not found in file " + envFileName);
+      }
+      System.setProperty("mongo.api.public.key", mongoApiPublicKey);
+
+      String mongoApiPrivateKey = dotenv.get("MONGO_API_PRIVATE_KEY");
+      if (mongoApiPrivateKey == null) {
+        throw new IllegalStateException("Variable MONGO_API_PRIVATE_KEY not found in file " + envFileName);
+      }
+      System.setProperty("mongo.api.private.key", mongoApiPrivateKey);
+
+      String mongoProjectId = dotenv.get("MONGO_PROJECT_ID");
+      if (mongoProjectId == null) {
+        throw new IllegalStateException("Variable MONGO_PROJECT_ID not found in file " + envFileName);
+      }
+      System.setProperty("mongo.project.id", mongoProjectId);
     }
 
     SpringApplication.run(MyWebsiteApplication.class, args);

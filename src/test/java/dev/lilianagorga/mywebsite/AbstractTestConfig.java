@@ -19,5 +19,8 @@ public class AbstractTestConfig {
     registry.add("sendgrid.api.key", () -> dotenv.get("MOCK_KEY"));
     registry.add("site.owner.email", () -> dotenv.get("MOCK_EMAIL"));
     registry.add("admin.email", () -> dotenv.get("ADMIN_MOCK_EMAIL"));
+    registry.add("mongo.api.public.key", () -> dotenv.get("MONGO_API_PUBLIC_KEY"));
+    registry.add("mongo.api.private.key", () -> dotenv.get("MONGO_API_PRIVATE_KEY"));
+    registry.add("mongo.project.id", () -> dotenv.get("MONGO_PROJECT_ID"));
   }
 }
