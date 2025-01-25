@@ -39,6 +39,7 @@ public class SecurityConfig {
                       .requestMatchers("/send-email").permitAll()
                       .requestMatchers("/").permitAll()
                       .requestMatchers("/messages/**").permitAll()
+                      .requestMatchers("/update-ip").permitAll()
                       .requestMatchers("/users/**").hasAnyAuthority("USER", "ADMIN")
                       .anyRequest().authenticated())
               .httpBasic(Customizer.withDefaults());
