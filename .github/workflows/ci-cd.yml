@@ -16,6 +16,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Clear GitHub Actions Cache
+        run: |
+          sudo rm -rf ~/.m2/repository
+
       - name: Set up JDK 23
         uses: actions/setup-java@v3
         with:
@@ -28,6 +32,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: build
+    timeout-minutes: 5
 
     steps:
       - name: Checkout repository
@@ -50,6 +55,15 @@ jobs:
           echo "MONGO_API_PUBLIC_KEY=${{ secrets.MONGO_API_PUBLIC_KEY }}" >> .env.testing
           echo "MONGO_API_PRIVATE_KEY=${{ secrets.MONGO_API_PRIVATE_KEY }}" >> .env.testing
           echo "MONGO_PROJECT_ID=${{ secrets.MONGO_PROJECT_ID }}" >> .env.testing
+
+      - name: Check Public IP
+        run: curl ifconfig.me
+
+      - name: Debug MongoDB Connection
+        run: |
+          ping ac-pcd8qf3-shard-00-00.azi10zd.mongodb.net
+          nslookup ac-pcd8qf3-shard-00-00.azi10zd.mongodb.net
+          curl ifconfig.me
 
       - name: Run Tests
         env:
