@@ -39,6 +39,18 @@ jobs:
           java-version: '23'
           distribution: 'temurin'
 
+      - name: Set Environment Variables
+        run: |
+          echo "TEST_DB_URL=${{ secrets.TEST_DB_URL }}" >> $GITHUB_ENV
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
+          echo "JWT_EXPIRATION_MS=${{ secrets.JWT_EXPIRATION_MS }}" >> $GITHUB_ENV
+          echo "MOCK_KEY=${{ secrets.MOCK_KEY }}" >> $GITHUB_ENV
+          echo "MOCK_EMAIL=${{ secrets.MOCK_EMAIL }}" >> $GITHUB_ENV
+          echo "ADMIN_MOCK_EMAIL=${{ secrets.ADMIN_MOCK_EMAIL }}" >> $GITHUB_ENV
+          echo "MONGO_API_PUBLIC_KEY=${{ secrets.MONGO_API_PUBLIC_KEY }}" >> $GITHUB_ENV
+          echo "MONGO_API_PRIVATE_KEY=${{ secrets.MONGO_API_PRIVATE_KEY }}" >> $GITHUB_ENV
+          echo "MONGO_PROJECT_ID=${{ secrets.MONGO_PROJECT_ID }}" >> $GITHUB_ENV
+
       - name: Run Tests
         run: mvn test
 
