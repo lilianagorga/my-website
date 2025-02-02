@@ -39,19 +39,21 @@ jobs:
           java-version: '23'
           distribution: 'temurin'
 
-      - name: Set Environment Variables
+      - name: Create .env.testing File
         run: |
-          echo "TEST_DB_URL=${{ secrets.TEST_DB_URL }}" >> $GITHUB_ENV
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
-          echo "JWT_EXPIRATION_MS=${{ secrets.JWT_EXPIRATION_MS }}" >> $GITHUB_ENV
-          echo "MOCK_KEY=${{ secrets.MOCK_KEY }}" >> $GITHUB_ENV
-          echo "MOCK_EMAIL=${{ secrets.MOCK_EMAIL }}" >> $GITHUB_ENV
-          echo "ADMIN_MOCK_EMAIL=${{ secrets.ADMIN_MOCK_EMAIL }}" >> $GITHUB_ENV
-          echo "MONGO_API_PUBLIC_KEY=${{ secrets.MONGO_API_PUBLIC_KEY }}" >> $GITHUB_ENV
-          echo "MONGO_API_PRIVATE_KEY=${{ secrets.MONGO_API_PRIVATE_KEY }}" >> $GITHUB_ENV
-          echo "MONGO_PROJECT_ID=${{ secrets.MONGO_PROJECT_ID }}" >> $GITHUB_ENV
+          echo "TEST_DB_URL=${{ secrets.TEST_DB_URL }}" >> .env.testing
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.testing
+          echo "JWT_EXPIRATION_MS=${{ secrets.JWT_EXPIRATION_MS }}" >> .env.testing
+          echo "MOCK_KEY=${{ secrets.MOCK_KEY }}" >> .env.testing
+          echo "MOCK_EMAIL=${{ secrets.MOCK_EMAIL }}" >> .env.testing
+          echo "ADMIN_MOCK_EMAIL=${{ secrets.ADMIN_MOCK_EMAIL }}" >> .env.testing
+          echo "MONGO_API_PUBLIC_KEY=${{ secrets.MONGO_API_PUBLIC_KEY }}" >> .env.testing
+          echo "MONGO_API_PRIVATE_KEY=${{ secrets.MONGO_API_PRIVATE_KEY }}" >> .env.testing
+          echo "MONGO_PROJECT_ID=${{ secrets.MONGO_PROJECT_ID }}" >> .env.testing
 
       - name: Run Tests
+        env:
+          SPRING_PROFILES_ACTIVE: test
         run: mvn test
 
   deploy:
