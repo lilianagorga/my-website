@@ -56,19 +56,30 @@ jobs:
           echo "MONGO_API_PRIVATE_KEY=${{ secrets.MONGO_API_PRIVATE_KEY }}" >> .env.testing
           echo "MONGO_PROJECT_ID=${{ secrets.MONGO_PROJECT_ID }}" >> .env.testing
 
-      - name: Check Public IP
-        run: curl ifconfig.me
+      - name: Get Public IP
+        id: get_ip
+        run: echo "ip_address=$(curl -s ifconfig.me)" >> "$GITHUB_OUTPUT"
 
-      - name: Debug MongoDB Connection
+      - name: Add IP to MongoDB Atlas
         run: |
-          ping ac-pcd8qf3-shard-00-00.azi10zd.mongodb.net
-          nslookup ac-pcd8qf3-shard-00-00.azi10zd.mongodb.net
-          curl ifconfig.me
+          curl -X POST \
+            -u "${{ secrets.MONGO_API_PUBLIC_KEY }}:${{ secrets.MONGO_API_PRIVATE_KEY }}" \
+            --header "Content-Type: application/json" \
+            --data '[{"ipAddress": "${{ steps.get_ip.outputs.ip_address }}", "comment": "GitHub Action Runner"}]' \
+            "https://cloud.mongodb.com/api/atlas/v1.0/groups/${{ secrets.MONGO_PROJECT_ID }}/accessList"
 
-      - name: Run Tests
-        env:
-          SPRING_PROFILES_ACTIVE: test
-        run: mvn test
+            - name: Run Tests
+              env:
+                SPRING_PROFILES_ACTIVE: test
+              run: mvn test
+
+            - name: Remove IP from MongoDB Atlas
+              if: always()
+              run: |
+                curl -X DELETE \
+                  -u "${{ secrets.MONGO_API_PUBLIC_KEY }}:${{ secrets.MONGO_API_PRIVATE_KEY }}" \
+                  "https://cloud.mongodb.com/api/atlas/v1.0/groups/${{ secrets.MONGO_PROJECT_ID }}/accessList/${{ steps.get_ip.outputs.ip_address }}"
+  
 
   deploy:
     runs-on: ubuntu-latest
