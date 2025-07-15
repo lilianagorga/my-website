@@ -38,3 +38,6 @@ build/
 .env
 .env.testing
 .env.production
+
+### AI ###
+CLAUDE.md
