@@ -16,7 +16,7 @@ public class IpScheduler {
     this.ipUpdater = ipUpdater;
   }
 
-  @Scheduled(fixedRate = 86400000)
+  @Scheduled(cron = "0 0 9 * * *")
   public void updateIp() {
     try {
       log.info("Starting scheduled IP update...");

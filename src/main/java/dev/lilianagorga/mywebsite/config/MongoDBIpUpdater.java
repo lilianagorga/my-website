@@ -1,5 +1,6 @@
 package dev.lilianagorga.mywebsite.config;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
@@ -46,7 +47,6 @@ public class MongoDBIpUpdater {
 
   public void updateIpAddress() {
     try {
-
       if (publicKey == null || privateKey == null || projectId == null) {
         log.error("Environment variables are not set correctly.");
         return;
@@ -54,26 +54,37 @@ public class MongoDBIpUpdater {
 
       String ipAddress = getPublicIp().trim();
       String url = BASE_URL + "/groups/" + projectId + "/accessList";
-
-
-      String payload = "[{\"ipAddress\": \"" + ipAddress + "\", \"comment\": \"Testing API\"}]";
+      String payload = "[{\"ipAddress\": \"" + ipAddress + "\", \"comment\": \"Auto-added by app\"}]";
 
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.APPLICATION_JSON);
       headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
       HttpEntity<String> request = new HttpEntity<>(payload, headers);
 
-      log.info("Sending request to URL: {}", url);
-      log.info("Payload: {}", payload);
+      String listUrl = BASE_URL + "/groups/" + projectId + "/accessList?itemsPerPage=500";
+      ResponseEntity<String> existing = restTemplate.getForEntity(listUrl, String.class);
 
-      ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
-      if (!response.getStatusCode().is2xxSuccessful()) {
-        throw new RuntimeException("Failed to update IP. Status code: " + response.getStatusCode());
+      if (existing.getStatusCode().is2xxSuccessful() && existing.getBody() != null) {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode results = mapper.readTree(existing.getBody()).get("results");
+        boolean alreadyExists = false;
+        for (JsonNode entry : results) {
+          if (entry.get("ipAddress").asText().equals(ipAddress)) {
+            alreadyExists = true;
+            break;
+          }
+        }
+
+        if (alreadyExists) {
+          log.info("IP {} già presente nella Access List, nessuna azione necessaria.", ipAddress);
+          return;
+        }
       }
 
+      ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
       log.info("Response: {}", response.getStatusCode());
       log.info("Response Body: {}", response.getBody());
+
     } catch (Exception e) {
       log.error("Failed to update IP", e);
     }
