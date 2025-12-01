@@ -35,9 +35,12 @@ public class SecurityConfig {
     } else if ("dev".equals(activeProfile) || "prod".equals(activeProfile)) {
       http.csrf(AbstractHttpConfigurer::disable)
               .authorizeHttpRequests(auth -> auth
+                      .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
                       .requestMatchers("/auth/**").permitAll()
                       .requestMatchers("/send-email").permitAll()
                       .requestMatchers("/").permitAll()
+                      .requestMatchers("/projects/**").permitAll()
+                      .requestMatchers("/contact").permitAll()
                       .requestMatchers("/messages/**").permitAll()
                       .requestMatchers("/update-ip").permitAll()
                       .requestMatchers("/users/**").hasAnyAuthority("USER", "ADMIN")
