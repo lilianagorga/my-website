@@ -7,6 +7,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
@@ -81,12 +82,13 @@ class MongoDBIpUpdaterTest extends AbstractTestConfig {
     when(restTemplateMock.getForEntity(eq(LIST_URL), eq(String.class)))
             .thenReturn(new ResponseEntity<>("{\"results\":[]}", HttpStatus.OK));
     when(restTemplateMock.postForEntity(eq(BASE_URL), any(HttpEntity.class), eq(String.class)))
-            .thenReturn(new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST));
+            .thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Bad Request"));
 
     // act
-    mongoDBIpUpdater.updateIpAddress();
+    boolean result = mongoDBIpUpdater.updateIpAddress();
 
     // assert
+    assertFalse(result);
     verify(restTemplateMock).postForEntity(eq(BASE_URL), any(HttpEntity.class), eq(String.class));
   }
 
