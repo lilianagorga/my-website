@@ -30,10 +30,12 @@ public class SecurityConfig {
     String activeProfile = System.getProperty("spring.profiles.active", "dev");
 
     if ("test".equals(activeProfile)) {
-      http.csrf(AbstractHttpConfigurer::disable)
+      http.cors(Customizer.withDefaults())
+              .csrf(AbstractHttpConfigurer::disable)
               .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
     } else if ("dev".equals(activeProfile) || "prod".equals(activeProfile)) {
-      http.csrf(AbstractHttpConfigurer::disable)
+      http.cors(Customizer.withDefaults())
+              .csrf(AbstractHttpConfigurer::disable)
               .authorizeHttpRequests(auth -> auth
                       .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
                       .requestMatchers("/auth/**").permitAll()
