@@ -3,61 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
+    <title>Accesso Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background-color: #F5F0E8; }
-        .login-card { max-width: 400px; margin-top: 10vh; border-color: #D4C5A9; }
+        .auth-card { border-color: #D4C5A9; }
         .btn-login { background-color: #8B7355; border-color: #8B7355; color: #fff; }
         .btn-login:hover { background-color: #4A3728; border-color: #4A3728; color: #fff; }
         .icon-login { color: #8B7355; }
+        .highlight-register { border: 2px solid #8B7355 !important; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card login-card mx-auto shadow-sm">
-            <div class="card-body p-4">
-                <div class="text-center mb-4">
-                    <i class="fas fa-user-shield fa-3x icon-login"></i>
-                    <h3 class="mt-2">Admin Login</h3>
-                </div>
+    <div class="container py-5"
+         th:with="showOnlyLogin=${param.login != null},
+                  showOnlyRegister=${param.register != null},
+                  showBoth=${param.login == null and param.register == null}">
+        <div class="text-center mb-4">
+            <i class="fas fa-lock fa-3x icon-login"></i>
+            <h1 class="h3 mt-2 mb-1">Accesso alla Dashboard Backend</h1>
+            <p class="text-muted mb-0">Accedi alla dashboard oppure crea un nuovo account.</p>
+        </div>
 
-                <div th:if="${param.error}" class="alert alert-danger">
-                    <i class="fas fa-exclamation-circle me-1"></i>Invalid email or password.
-                </div>
-                <div th:if="${param.logout}" class="alert alert-info">
-                    <i class="fas fa-check-circle me-1"></i>You have been logged out.
-                </div>
-                <div th:if="${registered}" class="alert alert-success">
-                    <i class="fas fa-check-circle me-1"></i>Admin account created. You can now login.
-                </div>
-                <div th:if="${param.adminExists}" class="alert alert-warning">
-                    <i class="fas fa-exclamation-triangle me-1"></i>An admin account already exists.
-                </div>
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-5" th:if="${showBoth or showOnlyLogin}">
+                <div class="card auth-card shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h2 class="h4 mb-3">Accedi</h2>
 
-                <form th:action="@{/admin/login}" method="post">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="username" name="username"
-                               placeholder="admin@email.com" required autofocus>
+                        <div th:if="${param.error}" class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle me-1"></i>Email o password non valide.
+                        </div>
+                        <div th:if="${param.logout}" class="alert alert-info">
+                            <i class="fas fa-check-circle me-1"></i>Hai effettuato il logout.
+                        </div>
+                        <div th:if="${registered}" class="alert alert-success">
+                            <i class="fas fa-check-circle me-1"></i>Account admin creato. Ora puoi accedere.
+                        </div>
+                        <div th:if="${registerSuccess}" class="alert alert-success">
+                            <i class="fas fa-check-circle me-1"></i><span th:text="${registerSuccess}"></span>
+                        </div>
+                        <div th:if="${param.adminExists}" class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-1"></i>Esiste gia un account admin.
+                        </div>
+                        <div th:if="${error}" class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle me-1"></i><span th:text="${error}"></span>
+                        </div>
+
+                        <form th:action="@{/admin/login}" method="post">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="username" name="username"
+                                       placeholder="user@email.com" required autofocus>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-login w-100">
+                                <i class="fas fa-sign-in-alt me-1"></i>Accedi
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-3">
+                            <a th:unless="${adminExists}" href="/admin/register" class="d-block mb-1 small" style="color: #8B7355;">
+                                Primo avvio: crea account admin
+                            </a>
+                            <a href="/" class="btn btn-link text-muted p-0" aria-label="Torna alla home" title="Torna alla home">
+                                <i class="fas fa-house"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password"
-                               required>
-                    </div>
-                    <button type="submit" class="btn btn-login w-100">
-                        <i class="fas fa-sign-in-alt me-1"></i>Login
-                    </button>
-                </form>
+                </div>
+            </div>
 
-                <div class="text-center mt-3">
-                    <a th:unless="${adminExists}" href="/admin/register" class="d-block mb-1 small"
-                       style="color: #8B7355;">
-                        No account yet? Create admin
-                    </a>
-                    <a href="/" class="text-muted small">Back to site</a>
+            <div class="col-lg-5" th:if="${showBoth or showOnlyRegister}">
+                <div id="register-form" class="card auth-card shadow-sm h-100"
+                     th:classappend="${showOnlyRegister} ? 'highlight-register'">
+                    <div class="card-body p-4">
+                        <h2 class="h4 mb-3">Registrati</h2>
+                        <p class="small text-muted">Non hai un account? Registrati.</p>
+                        <div th:if="${registerError}" class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle me-1"></i><span th:text="${registerError}"></span>
+                        </div>
+                        <form th:action="@{/admin/register-user}" method="post">
+                            <div class="mb-3">
+                                <label for="registerUsername" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="registerUsername" name="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="registerEmail" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="registerPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="registerPassword" name="password"
+                                       minlength="8" maxlength="20" required>
+                            </div>
+                            <button type="submit" class="btn btn-outline-secondary w-100">
+                                <i class="fas fa-user-plus me-1"></i>Crea
+                            </button>
+                        </form>
+                        <div class="text-center mt-3">
+                            <a href="/" class="btn btn-link text-muted p-0" aria-label="Torna alla home" title="Torna alla home">
+                                <i class="fas fa-house"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

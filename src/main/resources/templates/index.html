@@ -1,19 +1,36 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{layout/base :: head('Home - Liliana Gorga')}"></head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 home-page">
 
 <nav th:replace="~{layout/base :: navbar}"></nav>
 
 <div class="container my-5">
-    <div class="row align-items-center">
-        <div class="col-lg-6">
-            <h1 class="display-4 fw-bold">Backend Developer Java</h1>
-            <p class="lead">Building robust, scalable, and secure backend solutions using Spring Boot and MongoDB.</p>
-            <a href="/projects" class="btn btn-primary btn-lg mt-3">View My Work</a>
+    <div th:if="${param.forbidden}" class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="alert alert-warning shadow-sm border-0 text-center py-4">
+                <h2 class="h4 mb-2">403 - Accesso negato alla dashboard</h2>
+                <p class="mb-3">Con ruolo <strong>USER</strong> non puoi accedere alla dashboard backend. Puoi comunque vedere i miei lavori e contattarmi sul sito pubblico.</p>
+                <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
+                    <a href="https://lilianagorga.net" target="_blank" rel="noopener" class="btn btn-dark btn-sm">
+                        Vai al mio sito
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="col-lg-6 text-center">
-            <img src="https://placehold.co/400x400" alt="Profile" class="img-fluid rounded-circle shadow">
+    </div>
+
+    <div th:unless="${param.forbidden}" class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card home-dashboard-card shadow-sm">
+                <div class="card-body p-4 p-md-5 text-center">
+                    <h1 class="h2 fw-bold mb-3 home-dashboard-title">Backend Dashboard</h1>
+                    <p class="mb-4">Questa interfaccia backend serve esclusivamente per accedere e gestire la dashboard amministrativa.</p>
+                    <div class="d-flex justify-content-center">
+                        <a href="/admin/dashboard" class="btn btn-home-dashboard">Apri Dashboard</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -41,15 +41,14 @@ public class SecurityConfig {
                       .requestMatchers("/admin/login", "/admin/register").permitAll()
                       .requestMatchers("/admin/css/**", "/admin/js/**").permitAll()
                       .anyRequest().hasAuthority("ADMIN"))
+              .exceptionHandling(exception -> exception
+                      .accessDeniedHandler((request, response, accessDeniedException) ->
+                              response.sendRedirect("/?forbidden=true")))
               .formLogin(form -> form
                       .loginPage("/admin/login")
                       .loginProcessingUrl("/admin/login")
                       .defaultSuccessUrl("/admin/dashboard", true)
                       .failureUrl("/admin/login?error=true")
-                      .permitAll())
-              .logout(logout -> logout
-                      .logoutUrl("/admin/logout")
-                      .logoutSuccessUrl("/admin/login?logout=true")
                       .permitAll());
     }
     return http.build();
@@ -78,6 +77,10 @@ public class SecurityConfig {
                       .requestMatchers("/update-ip").permitAll()
                       .requestMatchers("/users/**").hasAnyAuthority("USER", "ADMIN")
                       .anyRequest().authenticated())
+              .logout(logout -> logout
+                      .logoutUrl("/logout")
+                      .logoutSuccessUrl("/")
+                      .permitAll())
               .httpBasic(Customizer.withDefaults());
       http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }

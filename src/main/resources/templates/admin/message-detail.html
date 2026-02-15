@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{admin/layout :: head('Message Detail')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{admin/layout :: head('Dettaglio messaggio')}"></head>
 <body>
     <nav th:replace="~{admin/layout :: navbar}"></nav>
 
@@ -11,9 +11,9 @@
             </div>
             <div class="col-md-10 content-area p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 style="color: #4A3728;">Message Detail</h2>
+                    <h2 style="color: #4A3728;">Dettaglio messaggio</h2>
                     <a href="/admin/messages" class="btn btn-secondary btn-sm">
-                        <i class="fas fa-arrow-left me-1"></i>Back to list
+                        <i class="fas fa-arrow-left me-1"></i>Torna alla lista
                     </a>
                 </div>
 
@@ -40,30 +40,36 @@
 
                 <div class="card" style="border-color: #D4C5A9;">
                     <div class="card-header" style="background-color: #E8DCC8; border-color: #D4C5A9;">
-                        <i class="fas fa-reply me-1"></i>Reply to
+                        <i class="fas fa-reply me-1"></i>Rispondi a
                         <strong th:text="${message.name}"></strong>
                     </div>
-                    <div class="card-body">
+                    <div sec:authorize="hasAuthority('ADMIN')" class="card-body">
                         <form th:action="@{'/admin/messages/' + ${message.id} + '/reply'}" method="post">
                             <div class="mb-3">
-                                <label for="replyText" class="form-label">Your reply</label>
+                                <label for="replyText" class="form-label">Testo risposta</label>
                                 <textarea class="form-control" id="replyText" name="replyText"
                                           rows="5" required
-                                          placeholder="Write your reply here..."></textarea>
+                                          placeholder="Scrivi qui la tua risposta..."></textarea>
                             </div>
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-admin">
-                                    <i class="fas fa-paper-plane me-1"></i>Send Reply
+                                    <i class="fas fa-paper-plane me-1"></i>Invia risposta
                                 </button>
                             </div>
                         </form>
                     </div>
-                    <div class="card-footer text-end" style="background-color: #F5F0E8; border-color: #D4C5A9;">
+                    <div sec:authorize="!hasAuthority('ADMIN')" class="card-body">
+                        <div class="alert alert-secondary mb-0">
+                            Modalita sola lettura: solo ADMIN puo rispondere o eliminare i messaggi.
+                        </div>
+                    </div>
+                    <div sec:authorize="hasAuthority('ADMIN')" class="card-footer text-end"
+                         style="background-color: #F5F0E8; border-color: #D4C5A9;">
                         <form th:action="@{'/admin/messages/' + ${message.id} + '/delete'}"
                               method="post" class="d-inline"
-                              onsubmit="return confirm('Delete this message?')">
+                              onsubmit="return confirm('Eliminare questo messaggio?')">
                             <button type="submit" class="btn btn-outline-danger btn-sm">
-                                <i class="fas fa-trash me-1"></i>Delete message
+                                <i class="fas fa-trash me-1"></i>Elimina messaggio
                             </button>
                         </form>
                     </div>

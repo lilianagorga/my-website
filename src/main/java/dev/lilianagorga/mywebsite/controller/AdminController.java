@@ -64,11 +64,11 @@ public class AdminController {
                                @RequestParam String password,
                                RedirectAttributes redirectAttributes) {
     if (userRepository.existsByRolesContaining("ADMIN")) {
-      redirectAttributes.addFlashAttribute("error", "An admin account already exists.");
+      redirectAttributes.addFlashAttribute("error", "Esiste gia un account admin.");
       return "redirect:/admin/login";
     }
     if (userRepository.findByEmail(email).isPresent()) {
-      redirectAttributes.addFlashAttribute("error", "Email already in use.");
+      redirectAttributes.addFlashAttribute("error", "Email gia in uso.");
       return "redirect:/admin/register";
     }
     User admin = User.builder()
@@ -111,14 +111,14 @@ public class AdminController {
                                RedirectAttributes redirectAttributes) {
     project.setTechStack(parseTechStack(techStackInput));
     projectService.createProject(project);
-    redirectAttributes.addFlashAttribute("success", "Project created successfully");
+    redirectAttributes.addFlashAttribute("success", "Progetto creato con successo.");
     return "redirect:/admin/projects";
   }
 
   @GetMapping("/projects/{id}/edit")
   public String editProjectForm(@PathVariable String id, Model model) {
     Project project = projectService.getProjectById(id)
-            .orElseThrow(() -> new RuntimeException("Project not found: " + id));
+            .orElseThrow(() -> new RuntimeException("Progetto non trovato: " + id));
     model.addAttribute("project", project);
     model.addAttribute("techStackInput",
             project.getTechStack() != null ? String.join(", ", project.getTechStack()) : "");
@@ -132,14 +132,14 @@ public class AdminController {
                                RedirectAttributes redirectAttributes) {
     project.setTechStack(parseTechStack(techStackInput));
     projectService.updateProject(id, project);
-    redirectAttributes.addFlashAttribute("success", "Project updated successfully");
+    redirectAttributes.addFlashAttribute("success", "Progetto aggiornato con successo.");
     return "redirect:/admin/projects";
   }
 
   @PostMapping("/projects/{id}/delete")
   public String deleteProject(@PathVariable String id, RedirectAttributes redirectAttributes) {
     projectService.deleteProject(id);
-    redirectAttributes.addFlashAttribute("success", "Project deleted successfully");
+    redirectAttributes.addFlashAttribute("success", "Progetto eliminato con successo.");
     return "redirect:/admin/projects";
   }
 
@@ -156,7 +156,7 @@ public class AdminController {
   @GetMapping("/messages/{id}")
   public String viewMessage(@PathVariable String id, Model model) {
     Message message = messageService.getMessageById(id)
-            .orElseThrow(() -> new RuntimeException("Message not found: " + id));
+            .orElseThrow(() -> new RuntimeException("Messaggio non trovato: " + id));
     if (!message.isRead()) {
       message.setRead(true);
       messageRepository.save(message);
@@ -170,17 +170,17 @@ public class AdminController {
                                 @RequestParam("replyText") String replyText,
                                 RedirectAttributes redirectAttributes) {
     Message message = messageService.getMessageById(id)
-            .orElseThrow(() -> new RuntimeException("Message not found: " + id));
+            .orElseThrow(() -> new RuntimeException("Messaggio non trovato: " + id));
     String subject = "Re: Messaggio da my-website - Risposta";
     emailSender.sendEmail(message.getEmail(), subject, replyText, replyText);
-    redirectAttributes.addFlashAttribute("success", "Reply sent to " + message.getEmail());
+    redirectAttributes.addFlashAttribute("success", "Risposta inviata a " + message.getEmail());
     return "redirect:/admin/messages/" + id;
   }
 
   @PostMapping("/messages/{id}/delete")
   public String deleteMessage(@PathVariable String id, RedirectAttributes redirectAttributes) {
     messageService.deleteMessage(id);
-    redirectAttributes.addFlashAttribute("success", "Message deleted successfully");
+    redirectAttributes.addFlashAttribute("success", "Messaggio eliminato con successo.");
     return "redirect:/admin/messages";
   }
 

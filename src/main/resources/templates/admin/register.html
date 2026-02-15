@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Registration</title>
+    <title>Registrazione Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -20,8 +20,8 @@
             <div class="card-body p-4">
                 <div class="text-center mb-4">
                     <i class="fas fa-user-plus fa-3x icon-register"></i>
-                    <h3 class="mt-2">Create Admin Account</h3>
-                    <p class="text-muted small">First-time setup. Only one admin account is allowed.</p>
+                    <h3 class="mt-2">Crea account admin</h3>
+                    <p class="text-muted small">Primo avvio: e consentito un solo account admin.</p>
                 </div>
 
                 <div th:if="${error}" class="alert alert-danger">
@@ -44,15 +44,15 @@
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" id="password" name="password"
                                required minlength="8" maxlength="20">
-                        <div class="form-text">8-20 characters</div>
+                        <div class="form-text">Da 8 a 20 caratteri</div>
                     </div>
                     <button type="submit" class="btn btn-register w-100">
-                        <i class="fas fa-user-plus me-1"></i>Create Admin Account
+                        <i class="fas fa-user-plus me-1"></i>Crea account admin
                     </button>
                 </form>
 
                 <div class="text-center mt-3">
-                    <a href="/admin/login" class="text-muted small">Already have an account? Login</a>
+                    <a href="/admin/login" class="text-muted small">Hai gia un account? Accedi</a>
                 </div>
             </div>
         </div>

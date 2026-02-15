@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{admin/layout :: head('Projects')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{admin/layout :: head('Progetti')}"></head>
 <body>
     <nav th:replace="~{admin/layout :: navbar}"></nav>
 
@@ -11,10 +11,11 @@
             </div>
             <div class="col-md-10 content-area p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 style="color: #4A3728;">Projects</h2>
-                    <a href="/admin/projects/new" class="btn btn-admin">
-                        <i class="fas fa-plus me-1"></i>New Project
+                    <h2 style="color: #4A3728;">Progetti</h2>
+                    <a sec:authorize="hasAuthority('ADMIN')" href="/admin/projects/new" class="btn btn-admin">
+                        <i class="fas fa-plus me-1"></i>Nuovo progetto
                     </a>
+                    <span sec:authorize="!hasAuthority('ADMIN')" class="badge text-bg-secondary">Sola lettura</span>
                 </div>
 
                 <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
@@ -23,16 +24,16 @@
                 </div>
 
                 <div th:if="${#lists.isEmpty(projects)}" class="alert alert-secondary">
-                    No projects yet. Create your first one!
+                    Nessun progetto presente. Crea il primo progetto.
                 </div>
 
                 <div th:unless="${#lists.isEmpty(projects)}" class="table-responsive">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Title</th>
-                                <th>Tech Stack</th>
-                                <th class="text-end">Actions</th>
+                                <th>Titolo</th>
+                                <th>Stack tecnologico</th>
+                                <th class="text-end">Azioni</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,17 +49,20 @@
                                           th:text="${tech}"></span>
                                 </td>
                                 <td class="text-end">
-                                    <a th:href="@{'/admin/projects/' + ${project.id} + '/edit'}"
-                                       class="btn btn-outline-admin btn-sm">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <form th:action="@{'/admin/projects/' + ${project.id} + '/delete'}"
-                                          method="post" class="d-inline"
-                                          onsubmit="return confirm('Delete this project?')">
-                                        <button type="submit" class="btn btn-outline-danger btn-sm">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    <div sec:authorize="hasAuthority('ADMIN')" class="d-inline">
+                                        <a th:href="@{'/admin/projects/' + ${project.id} + '/edit'}"
+                                           class="btn btn-outline-admin btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form th:action="@{'/admin/projects/' + ${project.id} + '/delete'}"
+                                              method="post" class="d-inline"
+                                              onsubmit="return confirm('Eliminare questo progetto?')">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <small sec:authorize="!hasAuthority('ADMIN')" class="text-muted">Nessuna azione</small>
                                 </td>
                             </tr>
                         </tbody>

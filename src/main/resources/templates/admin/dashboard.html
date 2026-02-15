@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{admin/layout :: head('Admin Dashboard')}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{admin/layout :: head('Dashboard Admin')}"></head>
 <body>
     <nav th:replace="~{admin/layout :: navbar}"></nav>
 
@@ -10,16 +10,19 @@
                 <div th:replace="~{admin/layout :: sidebar}"></div>
             </div>
             <div class="col-md-10 content-area p-4">
-                <h2 class="mb-4" style="color: #4A3728;">Dashboard</h2>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0" style="color: #4A3728;">Dashboard</h2>
+                    <span sec:authorize="!hasAuthority('ADMIN')" class="badge text-bg-secondary">Sola lettura</span>
+                </div>
 
                 <div class="row g-4">
                     <div class="col-md-4">
                         <div class="card card-stat h-100">
                             <div class="card-body text-center">
                                 <i class="fas fa-project-diagram fa-2x mb-2" style="color: #8B7355;"></i>
-                                <h5 class="card-title">Projects</h5>
+                                <h5 class="card-title">Progetti</h5>
                                 <p class="display-4 fw-bold" style="color: #8B7355;" th:text="${projectCount}">0</p>
-                                <a href="/admin/projects" class="btn btn-outline-admin btn-sm">Manage</a>
+                                <a href="/admin/projects" class="btn btn-outline-admin btn-sm">Gestisci</a>
                             </div>
                         </div>
                     </div>
@@ -27,9 +30,9 @@
                         <div class="card card-stat h-100">
                             <div class="card-body text-center">
                                 <i class="fas fa-envelope fa-2x mb-2" style="color: #A0926B;"></i>
-                                <h5 class="card-title">Total Messages</h5>
+                                <h5 class="card-title">Messaggi totali</h5>
                                 <p class="display-4 fw-bold" style="color: #A0926B;" th:text="${messageCount}">0</p>
-                                <a href="/admin/messages" class="btn btn-outline-admin btn-sm">View all</a>
+                                <a href="/admin/messages" class="btn btn-outline-admin btn-sm">Vedi tutti</a>
                             </div>
                         </div>
                     </div>
@@ -37,9 +40,9 @@
                         <div class="card card-stat h-100">
                             <div class="card-body text-center">
                                 <i class="fas fa-envelope-open-text fa-2x mb-2" style="color: #C4A35A;"></i>
-                                <h5 class="card-title">Unread Messages</h5>
+                                <h5 class="card-title">Messaggi non letti</h5>
                                 <p class="display-4 fw-bold" style="color: #C4A35A;" th:text="${unreadCount}">0</p>
-                                <a href="/admin/messages" class="btn btn-outline-admin btn-sm">Read now</a>
+                                <a href="/admin/messages" class="btn btn-outline-admin btn-sm">Leggi ora</a>
                             </div>
                         </div>
                     </div>
