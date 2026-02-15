@@ -43,3 +43,4 @@ build/
 CLAUDE.md
 PIANO-FRONTEND-ANGULAR.md
 .DS_Store
+.claude/worktrees
