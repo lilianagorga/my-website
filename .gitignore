@@ -3,8 +3,6 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-!**/src/main/resources/application.properties
-!**/src/main/resources/application-prod.properties
 
 ### STS ###
 .apt_generated
@@ -38,9 +36,12 @@ build/
 .env
 .env.testing
 .env.production
+src/main/resources/application.yml
+src/main/resources/application-test.yml
 
 ### AI ###
 CLAUDE.md
 PIANO-FRONTEND-ANGULAR.md
+PIANO-MIGLIORAMENTI.md
 .DS_Store
 .claude/worktrees

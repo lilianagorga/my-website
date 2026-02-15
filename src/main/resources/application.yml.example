@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://<username>:<password>@<cluster>.mongodb.net/<database>?retryWrites=true&w=majority
+
+jwt:
+  secret: <your-base64-encoded-secret>
+  expirationMs: 86400000
+
+sendgrid:
+  api:
+    Key: <your-sendgrid-api-key>
+
+site:
+  owner:
+    email: <your-email@example.com>
+
+admin:
+  email: <admin-email@example.com>
+
+mongo:
+  api:
+    public:
+      key: <mongo-atlas-public-key>
+    private:
+      key: <mongo-atlas-private-key>
+  project:
+    id: <mongo-atlas-project-id>
+
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          client: DEBUG
+      apache:
+        http: DEBUG
+    com:
+      github:
+        tomakehurst:
+          wiremock: DEBUG
