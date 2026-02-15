@@ -8,14 +8,10 @@ import dev.lilianagorga.mywebsite.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -39,11 +35,8 @@ public class AuthController {
       return new AuthResponse("Email already in use.", null);
     }
     user.setPassword(passwordEncoder.encode(user.getPassword()));
-    if (user.getRoles() == null || user.getRoles().isEmpty()) {
-      user.setRoles(Collections.singletonList("USER"));
-    } else if (!List.of("USER", "ADMIN").containsAll(user.getRoles())) {
-      throw new IllegalArgumentException("Invalid role provided.");
-    }
+    // Public registration is always a USER. Admin role must be assigned via protected admin flow.
+    user.setRoles(Collections.singletonList("USER"));
     if (user.getUsername() == null || user.getUsername().isBlank()) {
       user.setUsername("default_username");
     }
@@ -53,7 +46,7 @@ public class AuthController {
 
   @PostMapping("/login")
   public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest) {
-    Authentication authentication = authenticationManager.authenticate(
+    authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                     loginRequest.getEmail(),
                     loginRequest.getPassword()

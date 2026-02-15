@@ -63,6 +63,21 @@ class AuthControllerTest extends AbstractTestConfig {
   }
 
   @Test
+  void testRegisterForcesUserRole() {
+    User user = new User();
+    user.setUsername("adminTry");
+    user.setEmail("admin-try@example.com");
+    user.setPassword("password");
+    user.setRoles(List.of("ADMIN"));
+
+    AuthResponse response = authController.register(user);
+
+    assertEquals("User registered successfully.", response.getMessage());
+    User savedUser = userRepository.findByEmail(user.getEmail()).orElseThrow();
+    assertEquals(List.of("USER"), savedUser.getRoles());
+  }
+
+  @Test
   void testRegisterUserAlreadyExists() {
     User existingUser = new User();
     existingUser.setUsername("existingUser");
