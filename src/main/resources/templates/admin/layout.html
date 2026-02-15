@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --admin-dark: #4A3728;
+            --admin-medium: #8B7355;
+            --admin-light: #D4C5A9;
+            --admin-bg: #F5F0E8;
+            --admin-accent: #A0926B;
+            --admin-muted: #C4A35A;
+            --admin-soft: #7A8B6F;
+            --admin-warn: #A0674B;
+        }
+        body { background-color: var(--admin-bg); }
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: var(--admin-dark);
+        }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,.7);
+            padding: .75rem 1rem;
+        }
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            color: #fff;
+            background-color: var(--admin-medium);
+        }
+        .sidebar .nav-link i { width: 24px; }
+        .content-area { min-height: calc(100vh - 56px); }
+        .navbar-admin { background-color: var(--admin-dark) !important; }
+        .btn-admin {
+            background-color: var(--admin-medium);
+            border-color: var(--admin-medium);
+            color: #fff;
+        }
+        .btn-admin:hover {
+            background-color: var(--admin-dark);
+            border-color: var(--admin-dark);
+            color: #fff;
+        }
+        .btn-outline-admin {
+            border-color: var(--admin-medium);
+            color: var(--admin-medium);
+        }
+        .btn-outline-admin:hover {
+            background-color: var(--admin-medium);
+            color: #fff;
+        }
+        .badge-unread {
+            background-color: var(--admin-warn) !important;
+            color: #fff;
+        }
+        .card-stat { border-color: var(--admin-light) !important; }
+        .table thead { background-color: var(--admin-dark); color: #fff; }
+        .table-row-unread { background-color: #F0E8D5 !important; }
+    </style>
+</head>
+
+<body>
+
+<nav th:fragment="navbar" class="navbar navbar-dark navbar-admin">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/admin/dashboard">
+            <i class="fas fa-cogs me-2"></i>Admin Dashboard
+        </a>
+        <div class="d-flex align-items-center">
+            <a href="/" class="btn btn-outline-light btn-sm me-2">
+                <i class="fas fa-globe me-1"></i>View Site
+            </a>
+            <form th:action="@{/admin/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-sign-out-alt me-1"></i>Logout
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div th:fragment="sidebar" class="sidebar p-3">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${#strings.equals(activePage, 'dashboard')} ? 'active'" href="/admin/dashboard">
+                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${#strings.equals(activePage, 'projects')} ? 'active'" href="/admin/projects">
+                <i class="fas fa-project-diagram me-2"></i>Projects
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:classappend="${#strings.equals(activePage, 'messages')} ? 'active'" href="/admin/messages">
+                <i class="fas fa-envelope me-2"></i>Messages
+                <span th:if="${unreadCount != null && unreadCount > 0}"
+                      class="badge badge-unread ms-1" th:text="${unreadCount}"></span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

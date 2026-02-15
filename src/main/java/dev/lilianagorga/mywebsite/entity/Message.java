@@ -30,4 +30,7 @@ public class Message {
 
   @Builder.Default
   private LocalDateTime createdAt = LocalDateTime.now();
+
+  @Builder.Default
+  private boolean read = false;
 }

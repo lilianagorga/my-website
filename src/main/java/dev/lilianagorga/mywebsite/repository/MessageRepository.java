@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface MessageRepository extends MongoRepository<Message, String> {
   Optional<Message> findByEmail(String email);
+  long countByReadFalse();
 }

@@ -41,7 +41,5 @@ src/main/resources/application-test.yml
 
 ### AI ###
 CLAUDE.md
-PIANO-FRONTEND-ANGULAR.md
-PIANO-MIGLIORAMENTI.md
 .DS_Store
 .claude/worktrees

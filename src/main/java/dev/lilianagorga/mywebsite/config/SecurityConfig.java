@@ -3,6 +3,7 @@ package dev.lilianagorga.mywebsite.config;
 import dev.lilianagorga.mywebsite.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
@@ -26,6 +27,36 @@ public class SecurityConfig {
   }
 
   @Bean
+  @Order(1)
+  public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
+    String activeProfile = System.getProperty("spring.profiles.active", "dev");
+
+    if ("test".equals(activeProfile)) {
+      http.securityMatcher("/admin/**")
+              .csrf(AbstractHttpConfigurer::disable)
+              .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+    } else {
+      http.securityMatcher("/admin/**")
+              .authorizeHttpRequests(auth -> auth
+                      .requestMatchers("/admin/login", "/admin/register").permitAll()
+                      .requestMatchers("/admin/css/**", "/admin/js/**").permitAll()
+                      .anyRequest().hasAuthority("ADMIN"))
+              .formLogin(form -> form
+                      .loginPage("/admin/login")
+                      .loginProcessingUrl("/admin/login")
+                      .defaultSuccessUrl("/admin/dashboard", true)
+                      .failureUrl("/admin/login?error=true")
+                      .permitAll())
+              .logout(logout -> logout
+                      .logoutUrl("/admin/logout")
+                      .logoutSuccessUrl("/admin/login?logout=true")
+                      .permitAll());
+    }
+    return http.build();
+  }
+
+  @Bean
+  @Order(2)
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     String activeProfile = System.getProperty("spring.profiles.active", "dev");
 
