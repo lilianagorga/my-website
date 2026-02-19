@@ -7,7 +7,7 @@ Personal portfolio and contact platform built with Spring Boot.
 - **Backend:** Spring Boot 3.4.1, Java 21
 - **Database:** MongoDB Atlas
 - **Security:** Spring Security with JWT authentication
-- **Email:** SendGrid (production), mock service (development)
+- **Email:** Brevo SMTP (production), mock service (development)
 - **Admin UI:** Thymeleaf + Bootstrap 5
 - **Deployment:** Docker, Render
 
@@ -69,7 +69,8 @@ docker run -p 8080:8080 \
   -e SPRING_DATA_MONGODB_URI=<your-uri> \
   -e JWT_SECRET=<your-secret> \
   -e JWT_EXPIRATION_MS=86400000 \
-  -e SENDGRID_API_KEY=<your-key> \
+  -e BREVO_SMTP_LOGIN=<your-brevo-login> \
+  -e BREVO_SMTP_KEY=<your-brevo-smtp-key> \
   -e SITE_OWNER_EMAIL=<your-email> \
   -e ADMIN_EMAIL=<admin-email> \
   -e MONGO_API_PUBLIC_KEY=<key> \
@@ -98,7 +99,8 @@ src/main/java/dev/lilianagorga/mywebsite/
 | `SPRING_DATA_MONGODB_URI` | MongoDB connection string |
 | `JWT_SECRET` | Base64-encoded JWT signing key |
 | `JWT_EXPIRATION_MS` | Token expiration in milliseconds |
-| `SENDGRID_API_KEY` | SendGrid API key |
+| `BREVO_SMTP_LOGIN` | Brevo SMTP login |
+| `BREVO_SMTP_KEY` | Brevo SMTP key |
 | `SITE_OWNER_EMAIL` | Sender email address |
 | `ADMIN_EMAIL` | Admin notification email |
 | `MONGO_API_PUBLIC_KEY` | MongoDB Atlas API public key |

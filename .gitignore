@@ -43,3 +43,4 @@ src/main/resources/application-test.yml
 CLAUDE.md
 .DS_Store
 .claude/worktrees
+Migrazione-SendGrid-Brevo.md

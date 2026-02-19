@@ -10,10 +10,6 @@ jwt:
   secret: <your-base64-encoded-secret>
   expirationMs: 86400000
 
-sendgrid:
-  api:
-    Key: <your-sendgrid-api-key>
-
 site:
   owner:
     email: <your-email@example.com>
