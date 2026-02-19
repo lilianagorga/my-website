@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +21,7 @@ public class EmailNotificationService implements NotificationService {
     this.adminEmail = adminEmail;
   }
 
+  @Async
   @Override
   public void notify(Message message) {
     if (message.getName() == null || message.getEmail() == null || message.getMessage() == null) {
