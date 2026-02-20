@@ -20,26 +20,13 @@ public class IpScheduler {
 
   @EventListener(ApplicationReadyEvent.class)
   public void onStartup() {
-    try {
-      log.info("Startup IP update triggered");
-      boolean success = ipUpdater.updateIpAddress();
-      if (success) {
-        log.info("Startup IP update completed successfully");
-      } else {
-        log.warn("Startup IP update failed after retries");
-      }
-    } catch (Exception e) {
-      log.error("Startup IP update failed: {}", e.getMessage(), e);
-    }
+    // IP updater disabled - using 0.0.0.0/0 whitelist on Atlas
+    log.info("IP updater disabled - using 0.0.0.0/0 whitelist");
   }
 
   @Scheduled(cron = "0 0 9 * * *")
   public void updateIp() {
-    try {
-      log.info("Starting scheduled IP update...");
-      ipUpdater.updateIpAddress();
-    } catch (Exception e) {
-      log.error("Failed to update IP: ", e);
-    }
+    // IP updater disabled - using 0.0.0.0/0 whitelist on Atlas
+    log.info("IP updater disabled - using 0.0.0.0/0 whitelist");
   }
 }

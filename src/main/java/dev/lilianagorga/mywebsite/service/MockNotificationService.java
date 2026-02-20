@@ -14,7 +14,7 @@ public class MockNotificationService implements NotificationService {
 
   @Override
   public void notify(Message message) {
-    System.out.println("MockNotificationService using - Notification simulated");
+    logger.info("MockNotificationService using - Notification simulated");
     logger.info("Mock notification: Message received from {} ({}) in profile 'dev/test'. No email sent.",
             message.getName(), message.getEmail());
   }

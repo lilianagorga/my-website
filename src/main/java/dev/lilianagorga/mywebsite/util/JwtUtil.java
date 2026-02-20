@@ -4,6 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,7 @@ import java.util.List;
 @Component
 public class JwtUtil {
 
+  private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
   private final SecretKey secretKey;
   private final long jwtExpirationMs;
 
@@ -36,7 +39,7 @@ public class JwtUtil {
 
   public String getEmailFromToken(String token) {
     Claims claims = parseToken(token);
-    System.out.println("Extracted username from token: " + claims.getSubject());
+    logger.info("Extracted username from token: {}", claims.getSubject());
     return claims.getSubject();
   }
 
@@ -45,7 +48,7 @@ public class JwtUtil {
       parseToken(token);
       return true;
     } catch (Exception e) {
-      System.err.println("Token not valid: " + e.getMessage());
+      logger.error("Token not valid: {}", e.getMessage());
       return false;
     }
   }
@@ -63,7 +66,7 @@ public class JwtUtil {
 
       return claims;
     } catch (Exception e) {
-      System.err.println("Error during token parsing: " + e.getMessage());
+      logger.error("Error during token parsing: {}", e.getMessage());
       throw new IllegalArgumentException("Error during parsing token", e);
     }
   }

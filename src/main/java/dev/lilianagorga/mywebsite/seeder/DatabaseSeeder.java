@@ -6,6 +6,8 @@ import dev.lilianagorga.mywebsite.entity.Message;
 import dev.lilianagorga.mywebsite.repository.ProjectRepository;
 import dev.lilianagorga.mywebsite.repository.UserRepository;
 import dev.lilianagorga.mywebsite.repository.MessageRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -18,6 +20,7 @@ import java.util.Optional;
 @Profile("dev")
 public class DatabaseSeeder {
 
+  private static final Logger logger = LoggerFactory.getLogger(DatabaseSeeder.class);
   private final UserRepository userRepository;
   private final ProjectRepository projectRepository;
   private final MessageRepository messageRepository;
@@ -38,9 +41,9 @@ public class DatabaseSeeder {
     seedUsers();
     seedProjects();
     seedMessages();
-    System.out.println("Development database populated successfully!");
-    System.out.println("Users in database after seeding:");
-    userRepository.findAll().forEach(user -> System.out.printf("User: %s, Roles: %s%n", user.getEmail(), user.getRoles()));
+    logger.info("Development database populated successfully!");
+    logger.info("Users in database after seeding:");
+    userRepository.findAll().forEach(user -> logger.info("User: {}, Roles: {}", user.getEmail(), user.getRoles()));
   }
 
   private void seedUsers() {

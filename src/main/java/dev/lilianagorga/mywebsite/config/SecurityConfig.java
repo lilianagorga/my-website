@@ -21,10 +21,14 @@ public class SecurityConfig {
 
   private final CustomUserDetailsService userDetailsService;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
+  private final RateLimitingFilter rateLimitingFilter;
 
-  public SecurityConfig(CustomUserDetailsService userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter) {
+  public SecurityConfig(CustomUserDetailsService userDetailsService,
+                        JwtAuthenticationFilter jwtAuthenticationFilter,
+                        @org.springframework.lang.Nullable RateLimitingFilter rateLimitingFilter) {
     this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     this.userDetailsService = userDetailsService;
+    this.rateLimitingFilter = rateLimitingFilter;
   }
 
   @Bean
@@ -68,6 +72,7 @@ public class SecurityConfig {
       http.cors(Customizer.withDefaults())
               .csrf(AbstractHttpConfigurer::disable)
               .authorizeHttpRequests(auth -> auth
+                      .requestMatchers("/actuator/health").permitAll()
                       .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
                       .requestMatchers("/auth/**").permitAll()
                       .requestMatchers("/send-email").permitAll()
@@ -78,13 +83,16 @@ public class SecurityConfig {
                       .requestMatchers(HttpMethod.POST, "/messages").permitAll()
                       .requestMatchers("/messages/**").hasAuthority("ADMIN")
                       .requestMatchers("/update-ip").hasAuthority("ADMIN")
-                      .requestMatchers("/users/**").hasAnyAuthority("USER", "ADMIN")
+                      .requestMatchers("/users/**").hasAuthority("ADMIN")
                       .anyRequest().authenticated())
               .logout(logout -> logout
                       .logoutUrl("/logout")
                       .logoutSuccessUrl("/")
                       .permitAll())
               .httpBasic(Customizer.withDefaults());
+      if (rateLimitingFilter != null) {
+        http.addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class);
+      }
       http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
     return http.build();

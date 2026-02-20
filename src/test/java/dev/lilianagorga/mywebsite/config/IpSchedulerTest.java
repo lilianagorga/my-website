@@ -21,17 +21,14 @@ class IpSchedulerTest extends AbstractTestConfig {
   }
 
   @Test
-  void updateIp_shouldInvokeIpUpdater() {
+  void updateIp_shouldNotInvokeIpUpdaterWhenDisabled() {
     ipScheduler.updateIp();
-    verify(ipUpdaterMock, times(1)).updateIpAddress();
+    verify(ipUpdaterMock, never()).updateIpAddress();
   }
 
   @Test
-  void updateIp_shouldHandleExceptionGracefully() {
-    doThrow(new RuntimeException("Test exception")).when(ipUpdaterMock).updateIpAddress();
-
-    ipScheduler.updateIp();
-
-    verify(ipUpdaterMock, times(1)).updateIpAddress();
+  void onStartup_shouldNotInvokeIpUpdaterWhenDisabled() {
+    ipScheduler.onStartup();
+    verify(ipUpdaterMock, never()).updateIpAddress();
   }
 }
